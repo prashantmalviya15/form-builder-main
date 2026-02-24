@@ -11,7 +11,8 @@ export type FieldType =
   | "paragraph"
   | "header"
   | "headerAndDescription"
-  | "divider";
+  | "divider"
+  | "image";
 
 export type BlockBase = {
   id: string;
@@ -40,7 +41,7 @@ export type FieldBlock = BlockBase & {
 };
 
 export type ContentBlock = BlockBase & {
-  type: "heading" | "paragraph" | "divider"|"headerAndDescription";
+  type: "heading" | "paragraph" | "divider"|"headerAndDescription"|"image";
   text?: string; // heading/paragraph
   description?: string; // heading/paragraph
 };

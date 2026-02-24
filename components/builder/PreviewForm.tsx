@@ -24,6 +24,7 @@ export default function PreviewForm() {
   const schema = useBuilderStore((s) => s.schema);
   const blocks = useMemo(() => flattenBlocks(schema), [schema]);
   const [submitted, setSubmitted] = useState<any>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null); 
 
   const { register, handleSubmit } = useForm();
 
@@ -40,8 +41,18 @@ export default function PreviewForm() {
         className="space-y-3 rounded-xl border bg-white p-4"
         onSubmit={handleSubmit((data) => setSubmitted(data))}
       >
-    {schema.sections.map((section) => (
-  <div key={section.id} className="space-y-2">
+        {schema.sections.map((section) => (
+  <div
+    key={section.id}
+    className="space-y-4 border rounded-xl p-4 py-6 bg-white"
+  >
+    {/* Optional Section Title */}
+    {/* {section.title && (
+      <h2 className="text-lg font-semibold text-slate-800">
+        {section.title}
+      </h2>
+    )} */}
+
     {section.rows.map((row) => {
       const colCount = row.columns.length;
 
@@ -133,6 +144,48 @@ export default function PreviewForm() {
                       />
                     </div>
                   )}
+                  {b.type === "image" && (
+                    <div>
+                  <div className="rounded-xl bg-gray-50 p-4 ring-1 ring-gray-100">
+                    <label className="text-sm font-semibold text-gray-800">
+                     {b.text}
+                    </label>
+                    <input
+                      className="mt-2 block w-full text-sm "
+                      type="file"
+                      accept="image/*"
+                      {...register("photo")}
+                      // onChange={(e) => {
+                      //   const file = e.target.files?.[0];
+                      //   if (file) setPhotoPreview(URL.createObjectURL(file));
+                      //   else setPhotoPreview(null);
+                      //   // react-hook-form register already handles value
+                      // }}
+                    />
+                    {/* <p className="mt-2 text-xs text-gray-600">
+                    (PDF में फोटो चिपकाने/संलग्न करने का निर्देश है)
+                  </p> */}
+                  </div>
+
+                  <div className="rounded-xl bg-white p-4 ring-1 ring-gray-100">
+                    <div className="text-sm font-medium text-gray-800">
+                      Preview
+                    </div>
+                    <div className="mt-3 flex h-40 items-center justify-center overflow-hidden rounded-xl bg-gray-50 ring-1 ring-gray-100">
+                      {photoPreview ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={photoPreview}
+                          alt="photo preview"
+                          className="h-full w-full object-contain"
+                        />
+                      ) : (
+                        <span className="text-sm text-gray-500">No image</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                  )}
 
                   {(b.type === "text" ||
                     b.type === "email" ||
@@ -169,6 +222,28 @@ export default function PreviewForm() {
     })}
   </div>
 ))}
+    {/* {schema.sections.map((section) => (
+  <div key={section.id} className="space-y-2">
+    {section.rows.map((row) => {
+      const colCount = row.columns.length;
+
+      return (
+        <div
+          key={row.id}
+          className={`grid gap-4 ${
+            colCount === 1
+              ? "grid-cols-1"
+              : colCount === 2
+              ? "grid-cols-2"
+              : "grid-cols-3"
+          }`}
+        >
+          
+        </div>
+      );
+    })}
+  </div>
+))} */}
 
      
         {/* {blocks.map((b) => (

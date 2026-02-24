@@ -23,6 +23,9 @@ export function createBlock(type: FieldType): Block {
   if (type === "headerAndDescription") {
     return { id, type, text: "Header",description:"description" };
   }
+  if (type === "image") {
+    return { id, type, text: "Image"};
+  }
 
   // Field blocks
   const baseName = `${type}_${id.slice(0, 6)}`;

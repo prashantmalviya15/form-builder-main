@@ -68,6 +68,18 @@ export default function PropertiesPanel() {
           />
         </div>
       ) : null}
+      {block.type === "image" ? (
+        <div className="space-y-2">
+          <label className="text-xs font-medium">Image Header</label>
+          <textarea
+            className="w-full rounded-lg border p-2 text-sm"
+            rows={4}
+            value={block.text ?? ""}
+            onChange={(e) => updateBlock(block.id, { text: e.target.value } as any)}
+          />
+          
+        </div>
+      ) : null}
 
       {block.type === "divider" ? (
         <div className="text-xs text-slate-500">Divider has no editable properties.</div>

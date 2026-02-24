@@ -18,6 +18,7 @@ const PALETTE: { type: FieldType; title: string; hint: string }[] = [
    { type: "headerAndDescription", title: "Header and Description", hint: "Header and Description" },
   { type: "paragraph", title: "Paragraph", hint: "Content block" },
   { type: "divider", title: "Divider", hint: "Separator" },
+  { type: "image", title: "Image", hint: "image" },
 ];
 
 function PaletteItem({ type, title, hint }: { type: FieldType; title: string; hint: string }) {
