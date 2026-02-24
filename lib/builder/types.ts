@@ -38,10 +38,21 @@ export type FieldBlock = BlockBase & {
   required?: boolean;
   helpText?: string;
   options?: OptionItem[]; // for select/radio
+
+  min?: number;
+  max?: number;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  errorMessage?: string;
+  rangeRequired?: boolean;
+  errorRangeMessage?: string;
+  regRequired?: boolean;
+  errorRegMessage?: string;
 };
 
 export type ContentBlock = BlockBase & {
-  type: "heading" | "paragraph" | "divider"|"headerAndDescription"|"image";
+  type: "heading" | "paragraph" | "divider" | "headerAndDescription" | "image";
   text?: string; // heading/paragraph
   description?: string; // heading/paragraph
 };

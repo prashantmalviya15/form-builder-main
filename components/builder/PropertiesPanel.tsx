@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useBuilderStore } from "@/lib/builder/store";
@@ -19,7 +20,9 @@ function isField(block: Block): block is FieldBlock {
 
 export default function PropertiesPanel() {
   const selectedId = useBuilderStore((s) => s.selectedBlockId);
-  const block = useBuilderStore((s) => (selectedId ? s.getBlockById(selectedId) : null));
+  const block = useBuilderStore((s) =>
+    selectedId ? s.getBlockById(selectedId) : null,
+  );
   const updateBlock = useBuilderStore((s) => s.updateBlock);
 
   if (!selectedId || !block) {
@@ -46,7 +49,9 @@ export default function PropertiesPanel() {
             className="w-full rounded-lg border p-2 text-sm"
             rows={4}
             value={block.text ?? ""}
-            onChange={(e) => updateBlock(block.id, { text: e.target.value } as any)}
+            onChange={(e) =>
+              updateBlock(block.id, { text: e.target.value } as any)
+            }
           />
         </div>
       ) : null}
@@ -57,14 +62,18 @@ export default function PropertiesPanel() {
             className="w-full rounded-lg border p-2 text-sm"
             rows={4}
             value={block.text ?? ""}
-            onChange={(e) => updateBlock(block.id, { text: e.target.value } as any)}
+            onChange={(e) =>
+              updateBlock(block.id, { text: e.target.value } as any)
+            }
           />
           <label className="text-xs font-medium">Description</label>
           <textarea
             className="w-full rounded-lg border p-2 text-sm"
             rows={4}
             value={block.description ?? ""}
-            onChange={(e) => updateBlock(block.id, { description: e.target.value } as any)}
+            onChange={(e) =>
+              updateBlock(block.id, { description: e.target.value } as any)
+            }
           />
         </div>
       ) : null}
@@ -75,14 +84,17 @@ export default function PropertiesPanel() {
             className="w-full rounded-lg border p-2 text-sm"
             rows={4}
             value={block.text ?? ""}
-            onChange={(e) => updateBlock(block.id, { text: e.target.value } as any)}
+            onChange={(e) =>
+              updateBlock(block.id, { text: e.target.value } as any)
+            }
           />
-          
         </div>
       ) : null}
 
       {block.type === "divider" ? (
-        <div className="text-xs text-slate-500">Divider has no editable properties.</div>
+        <div className="text-xs text-slate-500">
+          Divider has no editable properties.
+        </div>
       ) : null}
 
       {/* Field blocks */}
@@ -93,7 +105,9 @@ export default function PropertiesPanel() {
             <input
               className="w-full rounded-lg border p-2 text-sm"
               value={block.label}
-              onChange={(e) => updateBlock(block.id, { label: e.target.value } as any)}
+              onChange={(e) =>
+                updateBlock(block.id, { label: e.target.value } as any)
+              }
             />
           </div>
 
@@ -103,7 +117,9 @@ export default function PropertiesPanel() {
               <input
                 className="w-full rounded-lg border p-2 text-sm"
                 value={block.placeholder ?? ""}
-                onChange={(e) => updateBlock(block.id, { placeholder: e.target.value } as any)}
+                onChange={(e) =>
+                  updateBlock(block.id, { placeholder: e.target.value } as any)
+                }
               />
             </div>
           ) : null}
@@ -113,18 +129,177 @@ export default function PropertiesPanel() {
               id="required"
               type="checkbox"
               checked={!!block.required}
-              onChange={(e) => updateBlock(block.id, { required: e.target.checked } as any)}
+              onChange={(e) =>
+                updateBlock(block.id, { required: e.target.checked } as any)
+              }
             />
             <label htmlFor="required" className="text-sm">
               Required
             </label>
           </div>
+          {
+            block.required && <div>
+              <div className="col-span-2" >
+                <label className="text-xs font-medium">Error Message</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.errorMessage ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      errorMessage: e.target.value,
+                    } as any)
+                  }
+                />
+              </div>
+         
+            </div>
+          }
+          {
+            block.required && <div>
+              <div className="flex items-center gap-2">
+            <input
+              id="required"
+              type="checkbox"
+              checked={!!block.rangeRequired}
+              onChange={(e) =>
+                updateBlock(block.id, { rangeRequired: e.target.checked } as any)
+              }
+            />
+            <label htmlFor="required" className="text-sm">
+              Range Required
+            </label>
+          </div>
+         
+            </div>
+          }
+          {block.type === "number" && block.rangeRequired && (
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-xs font-medium">Min Value</label>
+                <input
+                  type="number"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.min ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      min: Number(e.target.value),
+                    } as any)
+                  }
+                />
+                
+              </div>
+              <div>
+                <label className="text-xs font-medium">Max Value</label>
+                <input
+                  type="number"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.max ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      max: Number(e.target.value),
+                    } as any)
+                  }
+                />
+              </div>
+              <div className="col-span-2" >
+                <label className="text-xs font-medium">Range Error Message</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.errorRangeMessage ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      errorRangeMessage: e.target.value,
+                    } as any)
+                  }
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Text length validation */}
+          {(block.type === "text" || block.type === "textarea") && block.rangeRequired && (
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-xs font-medium">Min Length</label>
+                <input
+                  type="number"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.minLength ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      minLength: Number(e.target.value),
+                    } as any)
+                  }
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium">Max Length</label>
+                <input
+                  type="number"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.maxLength ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      maxLength: Number(e.target.value),
+                    } as any)
+                  }
+                />
+              </div>
+               <div className="col-span-2">
+                <label className="text-xs font-medium">Range Error Message</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.errorRangeMessage ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      errorRangeMessage: e.target.value,
+                    } as any)
+                  }
+                />
+              </div>
+            </div>
+          )}
+           {
+            block.required && <div className="flex items-center gap-2">
+            <input
+              id="required"
+              type="checkbox"
+              checked={!!block.regRequired}
+              onChange={(e) =>
+                updateBlock(block.id, { regRequired: e.target.checked } as any)
+              }
+            />
+            <label htmlFor="required" className="text-sm">
+              Reg Required
+            </label>
+          </div>
+          }
+          {
+            block.regRequired &&  <div className="col-span-2">
+                <label className="text-xs font-medium">Reg Error Message</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg border p-2 text-sm"
+                  value={block.errorRegMessage ?? ""}
+                  onChange={(e) =>
+                    updateBlock(block.id, {
+                      errorRegMessage: e.target.value,
+                    } as any)
+                  }
+                />
+              </div>
+          }
 
           {/* Options */}
-          {(block.type === "select" || block.type === "radio") ? (
+          {block.type === "select" || block.type === "radio" ? (
             <OptionsEditor
               options={block.options ?? []}
-              onChange={(opts) => updateBlock(block.id, { options: opts } as any)}
+              onChange={(opts) =>
+                updateBlock(block.id, { options: opts } as any)
+              }
             />
           ) : null}
         </div>
@@ -146,7 +321,16 @@ function OptionsEditor({
         <label className="text-xs font-medium">Options</label>
         <button
           className="rounded border px-2 py-1 text-xs hover:bg-slate-50"
-          onClick={() => onChange([...options, { id: nanoid(), label: `Option ${options.length + 1}`, value: `option_${options.length + 1}` }])}
+          onClick={() =>
+            onChange([
+              ...options,
+              {
+                id: nanoid(),
+                label: `Option ${options.length + 1}`,
+                value: `option_${options.length + 1}`,
+              },
+            ])
+          }
         >
           + Add
         </button>

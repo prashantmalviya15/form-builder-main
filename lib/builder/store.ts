@@ -13,24 +13,16 @@ type BuilderState = {
   selectedBlockId: string | null;
   mode: "build" | "preview";
   setMode: (mode: "build" | "preview") => void;
-
   selectBlock: (blockId: string | null) => void;
-
   addSection: () => void;
-  
-  
- 
   addRow: (sectionId: string, columnsCount: 1 | 2 | 3) => void;
-
   addBlockToColumn: (columnId: string, fieldType: FieldType) => void;
-
   moveBlock: (params: {
     blockId: string;
     fromColumnId: string;
     toColumnId: string;
     toIndex?: number;
   }) => void;
-
   reorderBlockWithinColumn: (params: {
     columnId: string;
     activeId: string;
